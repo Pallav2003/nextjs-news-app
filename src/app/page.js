@@ -1,95 +1,65 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+import { useState, useEffect } from "react";
+
+const Home = () => {
+  const [news, setNews] = useState(null);
+
+  useEffect(() => {
+    getNews();
+  }, []);
+
+  const getNews = async () => {
+    try {
+      const response = await fetch(
+        "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=6ed9a447bec3496c970f7d99dff64156"
+      );
+      const data = await response.json();
+      setNews(data);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+    <div className="w-[100%]">
+      <h1 className="flex justify-center items-center text-4xl mt-2">News</h1>
+      <div className="flex justify-center items-center">
+        {news && (
+          <div className="flex flex-wrap justify-center items-center">
+            {news.articles.map((article) => {
+              if (article.title !== "[Removed]") {
+                return (
+                  <a
+                    href={article.url}
+                    target="_blank"
+                    className="w-96 h-[409px] m-4 border-black border-2 flex-col"
+                  >
+                    <img
+                      src={article.urlToImage}
+                      alt="1"
+                      className="h-48 w-[100%] object-right-bottom "
+                    ></img>
+                    <h3>
+                      <b>Source :</b> {article.source.name}
+                    </h3>
+                    <h3>
+                      <b>Author :</b>
+                      {article.author}
+                    </h3>
+                    <h3>
+                      <b>Title :</b>
+                      {article.title}
+                    </h3>
+                  </a>
+                );
+              }
+            })}
+          </div>
+        )}
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </div>
   );
-}
+};
+
+export default Home;
