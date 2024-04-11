@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import { useState, useEffect } from "react";
 
 const Home = () => {
@@ -22,18 +22,20 @@ const Home = () => {
   };
 
   return (
-    <div className="w-[100%]">
-      <h1 className="flex justify-center items-center text-4xl mt-2">News</h1>
+    <div className="w-[100%] bg-blue-100">
+      <marquee direction="right">Bulletin</marquee>
+      <h1 className="flex justify-center items-center text-4xl">News</h1>
       <div className="flex justify-center items-center">
         {news && (
           <div className="flex flex-wrap justify-center items-center">
-            {news.articles.map((article) => {
+            {news.articles.map((article, index) => {
               if (article.title !== "[Removed]") {
                 return (
                   <a
                     href={article.url}
                     target="_blank"
-                    className="w-96 h-[409px] m-4 border-black border-2 flex-col"
+                    className="w-96 h-[409px] m-4 border-black border-2 flex-col shadow-lg"
+                    key={index}
                   >
                     <img
                       src={article.urlToImage}
